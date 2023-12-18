@@ -1,0 +1,13 @@
+#ARG BASE_LABEL
+
+FROM localhost/openmpi-builder as builder
+
+COPY ./mpi-benchmarks/ /src/mpi-benchmarks/
+WORKDIR /src/mpi-benchmarks/src_c/
+RUN apt-get update &&  apt-get -y install make
+RUN make -j 8
+
+
+FROM localhost/openmpi-run
+
+COPY --from=builder  /src/mpi-benchmarks/src_c/IMB-MPI1 /home/mpiuser/IMB-MPI1
